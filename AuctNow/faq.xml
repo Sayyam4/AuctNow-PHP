@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="faq.xsl"?>
+<faq_page>
+    <faq>
+        <quest> Q. What is AuctNow?</quest>
+        <ans> A. AuctNow is an interactive, real time online auction system 
+        which facilitates consumer-to-consumer sale of wide range of products.</ans>
+    </faq>
+    <faq>
+        <quest> Q. Why do I need an account?</quest>
+        <ans> A. An account is needed to link all your auctions and bids, to send auction related emails and for managing your wallet</ans>
+    </faq>
+    <faq>
+        <quest> Q. How to create an auction?</quest>
+        <ans> A. To create an auction, simply log in to your account or create an account you don't have one,
+         navigate to create auction tab and fill in the details. after filling in details, press submit to create an auction.</ans>
+    </faq>
+    <faq>
+        <quest> Q. What is the fees for an auction?</quest>
+        <ans> A. The typical fees for auction on our site is 10% of the highest bid.</ans>
+    </faq>
+    <faq>
+        <quest> Q. What is the advantage of online auction over traditional auction?</quest>
+        <ans> A. Online auctions provide convenience as the buyers need not to come to a certain place to buy anything in an auction.</ans>
+    </faq>
+    <faq>
+        <quest> Q. What are the payment options?</quest>
+        <ans> A. We support all major debit and credit card. There is also option to use internet banking</ans>
+    </faq>
+</faq_page> 
