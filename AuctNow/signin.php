@@ -359,14 +359,9 @@
         <?php 
             if (isset($_POST['google_email'])) {
                 $email = $_POST['google_email'];
-                ?>
-                <script>
-                    console.log("<?php echo "Email:".$email; ?>")
-                </script>
-                <?php
                 $conn = mysqli_connect("localhost","root","","auctnow");
                 $sql = "select * from user where user_email='".$email."'";
-                $res = mysqli_query($con, $sql);
+                $res = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($res) == 0) {
                     $sql1 = "insert into user (user_email) values ('".$email."')";
                     $res1 = mysqli_query($conn, $sql1);
@@ -378,6 +373,7 @@
                     <?php 
                 }
                 else {
+                    $_SESSION['email'] = $email;
                     ?>
                         <script>
                             window.location = "index.php";
