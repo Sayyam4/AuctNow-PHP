@@ -91,7 +91,7 @@
 								<li><a href="index.php">Home</a></li>
 								<li class="in" id="header_1"><a href="create_auction.php">Create Auction</a></li>
 								<li class="in" id="header_2"><a href="account.php"> My Account</a></li>
-								<li class="active"><a href="about.php">About</a></li>
+								<li><a href="about.php">About</a></li>
 								<li><a href="faq.php">FAQ</a></li>
 								<li id="header_4"><a href="signin.php">Signin/Signup</a></li>
 								<li class="in" id="header_3"><a href="signout.php">Signout</a></li>
@@ -198,7 +198,7 @@
                         <?php 
                             if ($row['prod_highest_bid'] == 0) {
                         ?>
-                            <div class="product__details__price"><?php echo $row['prod_base_price'] ; ?></div>
+                            <div class="product__details__price">$ <?php echo $row['prod_base_price'] ; ?></div>
 
                         <?php 
                             }
@@ -283,16 +283,15 @@
                         
                             <div class="form-group">
                                 <label for="recipient-name" class="col-form-label">Current Bid:</label>
-                                <input type="number" min="<?php echo $price; ?>" class="form-control" name="prev_bid" id="recipient-name" value='<?php echo $price; ?>' disabled>
+                                <input type="text" class="form-control" name="prev_bid" id="recipient-name" value='<?php echo $price; ?>' disabled>
                             </div>
-
-                    <?php 
-                        }
-                    ?>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label">New Bid:</label>
-                                <input type="text" name="new_bid" class="form-control" id="message-text"/>
+                                <input type="number" min="<?php echo $price+1 ; ?>" name="new_bid" class="form-control" id="message-text"/>
                             </div>
+                            <?php 
+                        }
+                    ?>
                         
                     </div>
                     <div class="modal-footer">

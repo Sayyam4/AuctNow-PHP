@@ -261,20 +261,20 @@
                     document.getElementById('footer_1').style.display="none";                
                     document.getElementById('footer_2').style.display="none";                
                     document.getElementById('footer_3').style.display="none";                
-                    document.getElementById('header_4').style.display="block";
-                    document.getElementById('footer_4').style.display="block";
+                    document.getElementById('header_4').style.display="inline-block";
+                    document.getElementById('footer_4').style.display="inline-block";
                 </script>
         <?php                
             }
             else { 
         ?>
                 <script>
-                    document.getElementById('header_1').style.display="block";                
-                    document.getElementById('header_2').style.display="block";                
-                    document.getElementById('header_3').style.display="block";             
-                    document.getElementById('footer_1').style.display="block";                
-                    document.getElementById('footer_2').style.display="block";                
-                    document.getElementById('footer_3').style.display="block";                
+                    document.getElementById('header_1').style.display="inline-block";                
+                    document.getElementById('header_2').style.display="inline-block";                
+                    document.getElementById('header_3').style.display="inline-block";             
+                    document.getElementById('footer_1').style.display="inline-block";                
+                    document.getElementById('footer_2').style.display="inline-block";                
+                    document.getElementById('footer_3').style.display="inline-block";                
                     document.getElementById('header_4').style.display="none";
                     document.getElementById('footer_4').style.display="none";
                 </script> 
