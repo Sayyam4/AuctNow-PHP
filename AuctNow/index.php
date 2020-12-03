@@ -110,7 +110,23 @@
 						$conn = mysqli_connect("localhost","root","","auctnow");
 						$sql = "select * from product where prod_status=1";
 						$res = mysqli_query( $conn, $sql);
+						$newtime = time() + (4.5 * 60 * 60);
+						$curr_date = date('Y-m-d H:i:s', $newtime); 
 						while ($row = mysqli_fetch_assoc($res)) {
+							if ($row['prod_end_date'] <= $curr_date) {
+								$sql = "update product set prod_status=0 where prod_id='".$row['prod_id']."'";
+								$res1 = mysqli_query( $conn, $sql);
+								if ($row['prod_highest_bid'] != 0) {
+									$sql = "select * from user where user_email ='".$row['prod_highest_bidder']."'";
+									$res1 = mysqli_query( $conn, $sql);
+									while ($row1 = mysqli_fetch_assoc( $res1)) {
+										$temp_bal = $row1['user_temp_balance'] - $row['prod_highest_bid'];
+										$sql = "update user set user_temp_balance='".$temp_bal."' where user_email='".$row['prod_highest_bidder']."'";
+										$res2 = mysqli_query( $conn, $sql);
+									}
+								}
+							}
+							else {
 					?>
 						<div class="col-lg-3 col-md-4 col-sm-6 mix women">
 							<div class="product__item">
@@ -146,6 +162,7 @@
 
 					<?php
 						}
+					}
 					?>
 					</div>
 					<!-- end php loop -->

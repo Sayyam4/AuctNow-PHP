@@ -50,7 +50,7 @@
                 if (distance < 0) {
                     clearInterval(x);
                     document.getElementById("demo").innerHTML = "EXPIRED";
-                    
+                    document.getElementById("bid_now").style.display = "none";
                 }
             }, 1000);
             }
@@ -223,7 +223,7 @@
                             if(isset($_SESSION['email'])) {
                         ?>
                             <div class="product__details__button">
-                                <button href="#" class="cart-btn" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><span class="icon_bag_alt"></span>&nbsp;Bid now</button>
+                                <button href="#" id="bid_now" class="cart-btn" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><span class="icon_bag_alt"></span>&nbsp;Bid now</button>
                             </div>
                         <?php 
                             }
@@ -250,22 +250,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
-                    <script>
-                        function checkBid(form) {
-                            console.log("1");
-                            if (form.prev_bid.value >= form.new_bid.value) {
-                                console.log("2");
-                                document.getElementsByClassName('modal-text')[0].innerHTML = "Bid amount should be greater than the current bid";
-                                jQuery('#myModal').modal('show'); 
-                                return false;
-                            }
-                            else {
-                                return true;
-                            }
-                        }
-                    </script>
-                    <form method="POST" action="product.php" onsubmit="return checkBid(this);">
+                    <form method="POST" action="product.php?prod_id=<?php echo $_GET['prod_id']; ?>">
                     <div class="modal-body">                   
                     <?php
                         $price=0;
@@ -287,7 +272,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="message-text" class="col-form-label">New Bid:</label>
-                                <input type="number" min="<?php echo $price+1 ; ?>" name="new_bid" class="form-control" id="message-text"/>
+                                <input type="number" min="<?php echo $price+1 ; ?>" name="new_bid" class="form-control" id="message-text" required/>
                             </div>
                             <?php 
                         }
@@ -408,6 +393,98 @@
         <script src="js/search.js"></script>
 		<script src="js/main.js"></script>
 		<!-- Js Plugins End -->
+
+        <?php
+    if(isset($_POST['new_bid'])) {
+        $new_bid = $_POST['new_bid'];
+        $price = 0;
+        $bid_status = 0;
+        $temp_bal = 0;
+        $total_bal = 0;
+        $conn = mysqli_connect("localhost","root","","auctnow");
+        $newtime = time() + (4.5 * 60 * 60);
+        $curr_date = date('Y-m-d H:i:s', $newtime);        
+        $sql = "select * from product where prod_id='".$_GET['prod_id']."'";
+        $res = mysqli_query( $conn, $sql);
+        while($row = mysqli_fetch_assoc( $res)) {            
+            if ($row['prod_end_date'] >= $curr_date) {
+                if ($row['prod_highest_bid'] == 0) {
+                    $price = $row['prod_base_price'];
+                }
+                else {
+                    $price = $row['prod_highest_bid'];
+                    $bid_status = 1;
+                }
+                if($price >= $new_bid) {
+                ?>
+                    <script>
+                        document.getElementsByClassName('modal-text')[0].innerHTML = "Please refresh your webpage again";
+                        jQuery('#myModal').modal('show');
+                    </script>
+                <?php                    
+                }
+                else {
+                    $sql = "select * from user where user_email='".$_SESSION['email']."'";
+                    $res1 = mysqli_query( $conn, $sql);
+                    while ($row1 = mysqli_fetch_assoc($res1)) {
+                        if ($row1['user_balance'] <= $price) {
+                        ?>
+                            <script>
+                                document.getElementsByClassName('modal-text')[0].innerHTML = "Insufficient Balance!";
+                                jQuery('#myModal').modal('show');
+                            </script>
+                        <?php 
+                        }
+                        else {
+                            if ($bid_status == 1) {
+                                $sql = "select * from user where user_email='".$row['prod_highest_bidder']."'";
+                                $res2 = mysqli_query($conn, $sql);
+                                while ($row2 = mysqli_fetch_assoc($res2)) {
+                                    $temp_bal = $row2['user_temp_balance'] - $price;
+                                    $total_bal = $row2['user_balance'] + $price;
+                                    $sql = "update user set user_balance='".$total_bal."',user_temp_balance='".$temp_bal."' where user_email='".$row['prod_highest_bidder']."'";
+                                    $res3 = mysqli_query( $conn, $sql);
+                                }
+                            }
+                            $total_bal = $row1['user_balance'] - $new_bid;
+                            $temp_bal = $row1['user_temp_balance'] + $new_bid;
+                            $sql = "update user set user_balance='".$total_bal."',user_temp_balance='".$temp_bal."' where user_email='".$_SESSION['email']."'";
+                            $res3 = mysqli_query( $conn, $sql);
+                            $sql = "update product set prod_previous_bid='".$price."',prod_highest_bid='".$new_bid."',prod_highest_bidder='".$_SESSION['email']."' where prod_id='".$_GET['prod_id']."'";
+                            $res3 = mysqli_query( $conn, $sql);
+                        } 
+                    }
+                }
+            }
+            else {
+                if ($row['prod_status'] == 1) {
+                    $sql = "update product set prod_status=0 where prod_id='".$_GET['prod_id']."'";
+                    $res1 = mysqli_query( $conn, $sql);
+                    if ($row['prod_highest_bid'] != 0) {
+                        $sql = "select * from user where user_email ='".$row['prod_highest_bidder']."'";
+                        $res1 = mysqli_query( $conn, $sql);
+                        while ($row1 = mysqli_fetch_assoc( $res1)) {
+                            $temp_bal = $row1['user_temp_balance'] - $row['prod_highest_bid'];
+                            $sql = "update user set user_temp_balance='".$temp_bal."' where user_email='".$row['prod_highest_bidder']."'";
+                            $res2 = mysqli_query( $conn, $sql);
+                        }
+                    } 
+                }
+            ?>
+            <script>
+                document.getElementsByClassName('modal-text')[0].innerHTML = "Sorry... The Auction has expired!";
+                jQuery('#myModal').modal('show');
+            </script>
+            <?php                                 
+            }
+        }
+    }
+?>
+
+
+
+
+
     </body>
 </html>
 

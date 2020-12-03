@@ -107,18 +107,18 @@
 				<div class="contact__form">
 					<form action="create_auction.php" method="POST" id="create_auction" enctype="multipart/form-data">
 						<label for="name">Product Name</label>
-						<input onfocus="loading()" type="text" id="prod_name" name="prod_name" placeholder="Enter product name"/>
+						<input onfocus="loading()" type="text" id="prod_name" name="prod_name" placeholder="Enter product name" required/>
 						<label for="desc">Description</label>
-						<textarea type="text" id="desc" name="prod_desc" placeholder=" Enter description" cols="3"></textarea>
+						<textarea type="text" id="desc" name="prod_desc" placeholder=" Enter description" cols="3" required></textarea>
 						<label for="tag">Tag</label>
-						<input type="text" name="tag" id="tag" placeholder="Tags" />
+						<input type="text" name="tag" id="tag" placeholder="Tags" required/>
 						<label for="start_bid">Base Price</label>
-						<input type="number" min="1" id="prod_base_price" name="prod_base_price" placeholder="Enter your base price"/>
+						<input type="number" min="1" id="prod_base_price" name="prod_base_price" placeholder="Enter your base price" required/>
 						<label for="auction_end_date">Auction End Date</label>
-						<input type="datetime-local" name="prod_end_date" id="auction_end_date" name="today"/>
+						<input type="datetime-local" name="prod_end_date" id="auction_end_date" name="today" required/>
 						<br /><br />
 						<label for="filesss">Add Product Images (Maximum 4 images)</label>
-						<input type="file" name="files[]" multiple> 
+						<input type="file" name="files[]" multiple required> 
 						<button type="submit" class="site-btn" style="margin-top: 3%">Create</button>
 					</form>
 				</div>

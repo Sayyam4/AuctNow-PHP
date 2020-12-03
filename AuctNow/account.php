@@ -125,7 +125,7 @@
                                 <h5 style="margin-bottom: 0.7em;">Add Balance</h5>
                             </div>
                             <form method="POST" action="account.php" id="add_balance">
-                                    <input type="number" min="1" name="bal" placeholder="Amount To Add">
+                                    <input type="number" min="1" name="bal" placeholder="Amount To Add" required>
                                     <button type="submit" class="site-btn">Add</button>
                             </form>
                         </div>
@@ -138,22 +138,32 @@
         <!-- Add Balance PHP Start -->
         <?php 
             if (isset($_POST['bal'])) {
-                $form_bal = $_POST['bal'];
-                $db_bal=0;
-                $conn = mysqli_connect("localhost","root","","auctnow");
-                $sql = "select user_balance from user where user_email='".$_SESSION['email']."'";
-                $res = mysqli_query( $conn, $sql);
-                while($row = mysqli_fetch_assoc($res)) {
-                    $db_bal = $row['user_balance'];
-                }
-                $total_bal = $db_bal + $form_bal;
-                $sql1 = "update user set user_balance='".$total_bal."' where user_email='".$_SESSION['email']."'";
-                $res1 = mysqli_query( $conn, $sql1);
+                if ($_POST['bal'] <= 0) {
                 ?>
-                <script>
-                    window.location("account.php");
-                </script>
+                    <script>
+                        document.getElementsByClassName('modal-text')[0].innerHTML = "Cannot contain values less than 1";
+                        jQuery('#myModal').modal('show'); 
+                    </script>
                 <?php
+                }
+                else {
+                    $form_bal = $_POST['bal'];
+                    $db_bal=0;
+                    $conn = mysqli_connect("localhost","root","","auctnow");
+                    $sql = "select user_balance from user where user_email='".$_SESSION['email']."'";
+                    $res = mysqli_query( $conn, $sql);
+                    while($row = mysqli_fetch_assoc($res)) {
+                        $db_bal = $row['user_balance'];
+                    }
+                    $total_bal = $db_bal + $form_bal;
+                    $sql1 = "update user set user_balance='".$total_bal."' where user_email='".$_SESSION['email']."'";
+                    $res1 = mysqli_query( $conn, $sql1);
+                ?>
+                    <script>
+                        window.location("account.php");
+                    </script>
+                <?php
+               }
             }
         ?>
         <!-- Add Balance PHP End -->
