@@ -103,8 +103,7 @@
 			<div class="container">
 				<div class="row">
 					<!-- start php loop -->
-
-					<div class="row property__gallery">
+					
 
 					<?php 
 						$conn = mysqli_connect("localhost","root","","auctnow");
@@ -164,7 +163,7 @@
 						}
 					}
 					?>
-					</div>
+					
 					<!-- end php loop -->
 				</div>
 			</div>
